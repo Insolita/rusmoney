@@ -28,20 +28,20 @@ trait PercentageTrait
     public function unPercent(int $percent, $roundMode = PHP_ROUND_HALF_UP): Money
     {
         $this->checkPrecisionSupport($percent);
-        $unPercent = static::checkOverflow(100 * $this->asInteger()) / (100 + $percent);
+        $unPercent = static::checkOverflow(100 * $this->asAmount()) / (100 + $percent);
         return new static((int)static::round0($unPercent, $roundMode));
     }
     
     public function calcPercent($percent = 1, $roundMode = PHP_ROUND_HALF_UP): Money
     {
         $this->checkPrecisionSupport($percent);
-        $perc = static::checkOverflow((0.01 * $percent) * $this->asInteger());
+        $perc = static::checkOverflow((0.01 * $percent) * $this->asAmount());
         return new static(intval(static::round0($perc, $roundMode)));
     }
     
     protected function checkPrecisionSupport($percent)
     {
-        if ($this->asInteger() < 100 && $percent < 10) {
+        if ($this->asAmount() < 100 && $percent < 10) {
             throw new PrecisionExceedException();
         }
     }

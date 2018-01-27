@@ -60,8 +60,8 @@ class MoneyTest extends TestCase
         expect(Money::fromInt(0)->asFloat())->equals(0);
         expect(Money::fromInt('0')->asFloat())->equals(0);
         //Warning! Suggest usage with declare(strict_types=1);
-        expect(Money::fromInt(123.34)->asInteger())->equals(123);
-        expect(Money::fromInt('123.34')->asInteger())->equals(123);
+        expect(Money::fromInt(123.34)->asAmount())->equals(123);
+        expect(Money::fromInt('123.34')->asAmount())->equals(123);
     }
     
     public function testFromIntOverflow()
@@ -91,7 +91,7 @@ class MoneyTest extends TestCase
         expect(Money::fromString('0.2')->asFloat())->equals(0.20);
         expect(Money::fromString('-0.2')->asFloat())->equals(-0.20);
         expect(Money::fromString('0')->asFloat())->equals(0);
-        expect(Money::fromString('-2.30')->asInteger())->equals(-230);
+        expect(Money::fromString('-2.30')->asAmount())->equals(-230);
     }
     
     public function testFromStringOverflow()
@@ -114,12 +114,12 @@ class MoneyTest extends TestCase
     
     public function testFromPair()
     {
-        expect(Money::fromPair(12345, 0)->asInteger())->equals(1234500);
-        expect(Money::fromPair(0, 15)->asInteger())->equals(15);
-        expect(Money::fromPair(0, 1)->asInteger())->equals(1);
-        expect(Money::fromPair(34, 7)->asInteger())->equals(3407);
-        expect(Money::fromPair(0, 50)->asInteger())->equals(50);
-        expect(Money::fromPair(234, 50)->asInteger())->equals(23450);
+        expect(Money::fromPair(12345, 0)->asAmount())->equals(1234500);
+        expect(Money::fromPair(0, 15)->asAmount())->equals(15);
+        expect(Money::fromPair(0, 1)->asAmount())->equals(1);
+        expect(Money::fromPair(34, 7)->asAmount())->equals(3407);
+        expect(Money::fromPair(0, 50)->asAmount())->equals(50);
+        expect(Money::fromPair(234, 50)->asAmount())->equals(23450);
     }
     
     public function testFromPairOverflow()
@@ -134,10 +134,10 @@ class MoneyTest extends TestCase
         expect($m->asFloat())->equals(2349);
         expect($m->asString())->equals('2349');
         expect($m->asFormattedString())->equals('2 349,00 р.');
-        expect($m->asInteger())->equals(234900);
+        expect($m->asAmount())->equals(234900);
         expect($m->asPair())->equals([2349, 0]);
         expect($m->jsonSerialize())->equals([
-            'amount' => $m->asInteger(),
+            'amount' => $m->asAmount(),
             'formatted' => $m->asFormattedString(),
             'rubles' => '2349',
             'kopecks' => '0',
@@ -150,10 +150,10 @@ class MoneyTest extends TestCase
         expect($m->asFloat())->equals(0.07);
         expect($m->asString())->equals('0.07');
         expect($m->asFormattedString())->equals('0,07 р.');
-        expect($m->asInteger())->equals(7);
+        expect($m->asAmount())->equals(7);
         expect($m->asPair())->equals([0, 7]);
         expect($m->jsonSerialize())->equals([
-            'amount' => $m->asInteger(),
+            'amount' => $m->asAmount(),
             'formatted' => $m->asFormattedString(),
             'rubles' => '0',
             'kopecks' => '7',
@@ -166,10 +166,10 @@ class MoneyTest extends TestCase
         expect($m->asFloat())->equals(0);
         expect($m->asString())->equals('0');
         expect($m->asFormattedString())->equals('0,00 р.');
-        expect($m->asInteger())->equals(0);
+        expect($m->asAmount())->equals(0);
         expect($m->asPair())->equals([0, 0]);
         expect($m->jsonSerialize())->equals([
-            'amount' => $m->asInteger(),
+            'amount' => $m->asAmount(),
             'formatted' => $m->asFormattedString(),
             'rubles' => '0',
             'kopecks' => '0',
@@ -182,10 +182,10 @@ class MoneyTest extends TestCase
         expect($m->asFloat())->equals(1);
         expect($m->asString())->equals('1');
         expect($m->asFormattedString())->equals('1,00 р.');
-        expect($m->asInteger())->equals(100);
+        expect($m->asAmount())->equals(100);
         expect($m->asPair())->equals([1, 0]);
         expect($m->jsonSerialize())->equals([
-            'amount' => $m->asInteger(),
+            'amount' => $m->asAmount(),
             'formatted' => $m->asFormattedString(),
             'rubles' => '1',
             'kopecks' => '0',
@@ -198,10 +198,10 @@ class MoneyTest extends TestCase
         expect($m->asFloat())->equals(2.37);
         expect($m->asString())->equals('2.37');
         expect($m->asFormattedString())->equals('2,37 р.');
-        expect($m->asInteger())->equals(237);
+        expect($m->asAmount())->equals(237);
         expect($m->asPair())->equals([2, 37]);
         expect($m->jsonSerialize())->equals([
-            'amount' => $m->asInteger(),
+            'amount' => $m->asAmount(),
             'formatted' => $m->asFormattedString(),
             'rubles' => '2',
             'kopecks' => '37',
@@ -214,10 +214,10 @@ class MoneyTest extends TestCase
         expect($m->asFloat())->equals(0.10);
         expect($m->asString())->equals('0.10');
         expect($m->asFormattedString())->equals('0,10 р.');
-        expect($m->asInteger())->equals(10);
+        expect($m->asAmount())->equals(10);
         expect($m->asPair())->equals([0, 10]);
         expect($m->jsonSerialize())->equals([
-            'amount' => $m->asInteger(),
+            'amount' => $m->asAmount(),
             'formatted' => $m->asFormattedString(),
             'rubles' => '0',
             'kopecks' => '10',

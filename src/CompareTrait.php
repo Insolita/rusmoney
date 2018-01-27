@@ -14,10 +14,10 @@ trait CompareTrait
 {
     public function compareTo(Money $other): int
     {
-        if ($this->asInteger() == $other->asInteger()) {
+        if ($this->asAmount() == $other->asAmount()) {
             return 0;
         }
-        return $this->asInteger() < $other->asInteger() ? -1 : 1;
+        return $this->asAmount() < $other->asAmount() ? -1 : 1;
     }
     
     public function equals(Money $other): bool
