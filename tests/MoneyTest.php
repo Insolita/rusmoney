@@ -8,29 +8,48 @@ namespace tests;
 
 use insolita\rusmoney\exceptions\ParseMoneyException;
 use insolita\rusmoney\Money;
-use const PHP_INT_MAX;
 use PHPUnit\Framework\TestCase;
 use TypeError;
+use const PHP_INT_MAX;
 use function expect;
 use function expect_that;
 
 class MoneyTest extends TestCase
 {
-    public function testZero(){
+    public function testZero()
+    {
         expect(Money::zero())->equals(Money::fromInt(0));
         expect(Money::zero()->asFloat())->equals(0);
         expect(Money::zero()->asInteger())->equals(0);
     }
-    public function testAsAbsolute(){
+    
+    public function testAsAbsolute()
+    {
         expect(Money::fromString('20')->asAbsolute()->asFloat())->equals(20);
         expect(Money::fromString('-20')->asAbsolute()->asFloat())->equals(20);
         expect(Money::fromString('0')->asAbsolute()->asFloat())->equals(0);
     }
-    public function testAsNegative(){
+    
+    public function testAsNegative()
+    {
         expect(Money::fromString('20')->asNegative()->asFloat())->equals(-20);
         expect(Money::fromString('-20')->asNegative()->asFloat())->equals(-20);
         expect(Money::fromString('0')->asNegative()->asFloat())->equals(0);
     }
+    
+    public function testAsRoubles()
+    {
+        expect(Money::fromString('0.01')->asRoubles())->equals(0);
+        expect(Money::fromString('0.32')->asRoubles())->equals(0);
+        expect(Money::fromString('10.32')->asRoubles())->equals(10);
+        expect(Money::fromInt(3440)->asRoubles())->equals(34);
+        expect(Money::fromInt(34)->asRoubles())->equals(0);
+        expect(Money::fromString('10.00')->asRoubles())->equals(10);
+        expect(Money::fromString('1543')->asRoubles())->equals(1543);
+        expect(Money::fromString('15.43')->asRoubles())->equals(15);
+        expect(Money::fromInt(3400)->asRoubles())->equals(34);
+    }
+    
     public function testFromInt()
     {
         expect(Money::fromInt(230)->asFloat())->equals(2.30);
@@ -54,7 +73,7 @@ class MoneyTest extends TestCase
     public function testFromIntOverflow2()
     {
         $this->expectException(TypeError::class);
-        new Money(PHP_INT_MAX+1);
+        new Money(PHP_INT_MAX + 1);
     }
     
     public function testFromString()
@@ -210,14 +229,25 @@ class MoneyTest extends TestCase
         expect_that(Money::fromString(0)->isZero());
         expect_that(Money::fromString(10)->isPositive());
         expect_that(Money::fromString(-10)->isNegative());
-    
+        
         expect_not(Money::fromString(0)->isPositive());
         expect_not(Money::fromString(0)->isNegative());
-    
+        
         expect_not(Money::fromString(10)->isZero());
         expect_not(Money::fromString(10)->isNegative());
-    
+        
         expect_not(Money::fromString(-10)->isZero());
         expect_not(Money::fromString(-10)->isPositive());
+    }
+    
+    public function testHasKopecks()
+    {
+        expect(Money::fromString('0.32')->hasKopecks())->true();
+        expect(Money::fromString('10.32')->hasKopecks())->true();
+        expect(Money::fromInt(3440)->hasKopecks())->true();
+        expect(Money::fromInt(34)->hasKopecks())->true();
+        expect(Money::fromString('10.00')->hasKopecks())->false();
+        expect(Money::fromString('1543')->hasKopecks())->false();
+        expect(Money::fromInt(3400)->hasKopecks())->false();
     }
 }

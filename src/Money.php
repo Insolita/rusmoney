@@ -57,6 +57,11 @@ class Money implements \JsonSerializable
         return $this->amount === 0;
     }
     
+    public function hasKopecks(): bool
+    {
+        return $this->amount % 100 !== 0;
+    }
+    
     public function asAbsolute(): Money
     {
         return $this->isNegative() ? $this->negate() : $this;
@@ -105,9 +110,14 @@ class Money implements \JsonSerializable
         return json_encode($this->jsonSerialize());
     }
     
-    public function asInteger(): int
+    public function asAmount(): int
     {
         return $this->amount;
+    }
+    
+    public function asRoubles(): int
+    {
+        return (int)static::round0($this->amount / 100);
     }
     
     public function asFloat(): float
