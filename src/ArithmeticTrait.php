@@ -10,17 +10,17 @@ trait ArithmeticTrait
 {
     public function add(Money $money): Money
     {
-        return new static($this->asInteger() + $money->asInteger());
+        return new static($this->asAmount() + $money->asAmount());
     }
     
     public function subtract(Money $money): Money
     {
-        return new static($this->asInteger() - $money->asInteger());
+        return new static($this->asAmount() - $money->asAmount());
     }
     
     public function multiply($factor, $roundMode = PHP_ROUND_HALF_UP): Money
     {
-        $mul = static::checkOverflow($this->asInteger() * static::checkOverflow($factor));
+        $mul = static::checkOverflow($this->asAmount() * static::checkOverflow($factor));
         return new static((int)static::round0($mul, $roundMode));
     }
     
@@ -55,9 +55,9 @@ trait ArithmeticTrait
      */
     public function allocateToTargets(int $number): array
     {
-        $low = new static(intval($this->asInteger() / $number));
-        $high = new static($low->asInteger() + 1);
-        $remainder = $this->asInteger() % $number;
+        $low = new static(intval($this->asAmount() / $number));
+        $high = new static($low->asAmount() + 1);
+        $remainder = $this->asAmount() % $number;
         $result = [];
         
         for ($i = 0; $i < $remainder; $i++) {
@@ -92,23 +92,23 @@ trait ArithmeticTrait
     {
         $result = [];
         $total = array_sum($ratios);
-        $remainder = $this->asInteger();
+        $remainder = $this->asAmount();
         
         for ($i = 0; $i < count($ratios); $i++) {
-            $amount = intval($this->asInteger() * $ratios[$i] / $total);
+            $amount = intval($this->asAmount() * $ratios[$i] / $total);
             $result[] = new static($amount);
             $remainder -= $amount;
         }
         
         for ($i = 0; $i < $remainder; $i++) {
-            $result[$i] = new static($result[$i]->asInteger() + 1);
+            $result[$i] = new static($result[$i]->asAmount() + 1);
         }
         return $result;
     }
     
     public function negate()
     {
-        return new static(-1 * $this->asInteger());
+        return new static(-1 * $this->asAmount());
     }
     
 }

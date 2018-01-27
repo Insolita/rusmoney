@@ -20,7 +20,7 @@ class MoneyTest extends TestCase
     {
         expect(Money::zero())->equals(Money::fromInt(0));
         expect(Money::zero()->asFloat())->equals(0);
-        expect(Money::zero()->asInteger())->equals(0);
+        expect(Money::zero()->asAmount())->equals(0);
     }
     
     public function testAsAbsolute()
