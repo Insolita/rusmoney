@@ -28,8 +28,8 @@ class MoneyTest extends TestCase
     }
     public function testAsNegative(){
         expect(Money::fromString('20')->asNegative()->asFloat())->equals(-20);
-        expect(Money::fromString('-20')->asAbsolute()->asFloat())->equals(-20);
-        expect(Money::fromString('0')->asAbsolute()->asFloat())->equals(0);
+        expect(Money::fromString('-20')->asNegative()->asFloat())->equals(-20);
+        expect(Money::fromString('0')->asNegative()->asFloat())->equals(0);
     }
     public function testFromInt()
     {
