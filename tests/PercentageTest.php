@@ -80,13 +80,13 @@ class PercentageTest extends TestCase
     public function testIncreaseOverflow()
     {
         $this->expectException(TypeError::class);
-        Money::fromInt(PHP_INT_MAX)->increaseOnPercent(1);
+        Money::fromAmount(PHP_INT_MAX)->increaseOnPercent(1);
     }
     
     public function testUnPercentOverflow()
     {
         $this->expectException(OverflowException::class);
-        Money::fromInt(PHP_INT_MAX)->unPercent(5);
+        Money::fromAmount(PHP_INT_MAX)->unPercent(5);
     }
     
     public function testPrecisionExceed1()

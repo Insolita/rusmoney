@@ -13,7 +13,7 @@ class CompareTest extends TestCase
     public function testCompareRubles()
     {
         expect_that(Money::fromString('234')->equals(Money::fromString('234.00')));
-        expect_that(Money::fromString('234')->equals(Money::fromInt(23400)));
+        expect_that(Money::fromString('234')->equals(Money::fromAmount(23400)));
         expect_that(Money::fromString('234')->equals(Money::fromPair(234, 0)));
         expect_that(Money::fromString('234')->equals(new Money(23400)));
         expect_that(Money::fromString('234')->greaterThanOrEqual(new Money(23400)));
@@ -25,7 +25,7 @@ class CompareTest extends TestCase
     public function testCompareKopecks()
     {
         expect_that(Money::fromString('0.15')->equals(Money::fromString('0.15')));
-        expect_that(Money::fromString('0.15')->equals(Money::fromInt(15)));
+        expect_that(Money::fromString('0.15')->equals(Money::fromAmount(15)));
         expect_that(Money::fromString('0.15')->equals(Money::fromPair(0, 15)));
         expect_that(Money::fromString('0.15')->equals(new Money(15)));
         expect_that(Money::fromString('0.15')->greaterThanOrEqual(new Money(15)));

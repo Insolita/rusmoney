@@ -141,7 +141,7 @@ class Money implements \JsonSerializable
         return new static((int)static::round0(100 * static::round2($value)));
     }
     
-    public static function fromInt(int $amount): Money
+    public static function fromAmount(int $amount): Money
     {
         return new static($amount);
     }

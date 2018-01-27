@@ -18,7 +18,7 @@ class MoneyTest extends TestCase
 {
     public function testZero()
     {
-        expect(Money::zero())->equals(Money::fromInt(0));
+        expect(Money::zero())->equals(Money::fromAmount(0));
         expect(Money::zero()->asFloat())->equals(0);
         expect(Money::zero()->asAmount())->equals(0);
     }
@@ -42,32 +42,32 @@ class MoneyTest extends TestCase
         expect(Money::fromString('0.01')->asRoubles())->equals(0);
         expect(Money::fromString('0.32')->asRoubles())->equals(0);
         expect(Money::fromString('10.32')->asRoubles())->equals(10);
-        expect(Money::fromInt(3440)->asRoubles())->equals(34);
-        expect(Money::fromInt(34)->asRoubles())->equals(0);
+        expect(Money::fromAmount(3440)->asRoubles())->equals(34);
+        expect(Money::fromAmount(34)->asRoubles())->equals(0);
         expect(Money::fromString('10.00')->asRoubles())->equals(10);
         expect(Money::fromString('1543')->asRoubles())->equals(1543);
         expect(Money::fromString('15.43')->asRoubles())->equals(15);
-        expect(Money::fromInt(3400)->asRoubles())->equals(34);
+        expect(Money::fromAmount(3400)->asRoubles())->equals(34);
     }
     
     public function testFromInt()
     {
-        expect(Money::fromInt(230)->asFloat())->equals(2.30);
-        expect(Money::fromInt(-230)->asFloat())->equals(-2.30);
-        expect(Money::fromInt('-200')->asFloat())->equals(-2);
-        expect(Money::fromInt(123456789)->asFloat())->equals(1234567.89);
-        expect(Money::fromInt(4)->asFloat())->equals(0.04);
-        expect(Money::fromInt(0)->asFloat())->equals(0);
-        expect(Money::fromInt('0')->asFloat())->equals(0);
+        expect(Money::fromAmount(230)->asFloat())->equals(2.30);
+        expect(Money::fromAmount(-230)->asFloat())->equals(-2.30);
+        expect(Money::fromAmount('-200')->asFloat())->equals(-2);
+        expect(Money::fromAmount(123456789)->asFloat())->equals(1234567.89);
+        expect(Money::fromAmount(4)->asFloat())->equals(0.04);
+        expect(Money::fromAmount(0)->asFloat())->equals(0);
+        expect(Money::fromAmount('0')->asFloat())->equals(0);
         //Warning! Suggest usage with declare(strict_types=1);
-        expect(Money::fromInt(123.34)->asAmount())->equals(123);
-        expect(Money::fromInt('123.34')->asAmount())->equals(123);
+        expect(Money::fromAmount(123.34)->asAmount())->equals(123);
+        expect(Money::fromAmount('123.34')->asAmount())->equals(123);
     }
     
     public function testFromIntOverflow()
     {
         $this->expectException(TypeError::class);
-        Money::fromInt('12345678901234567891234567890.5353');
+        Money::fromAmount('12345678901234567891234567890.5353');
     }
     
     public function testFromIntOverflow2()
@@ -244,10 +244,10 @@ class MoneyTest extends TestCase
     {
         expect(Money::fromString('0.32')->hasKopecks())->true();
         expect(Money::fromString('10.32')->hasKopecks())->true();
-        expect(Money::fromInt(3440)->hasKopecks())->true();
-        expect(Money::fromInt(34)->hasKopecks())->true();
+        expect(Money::fromAmount(3440)->hasKopecks())->true();
+        expect(Money::fromAmount(34)->hasKopecks())->true();
         expect(Money::fromString('10.00')->hasKopecks())->false();
         expect(Money::fromString('1543')->hasKopecks())->false();
-        expect(Money::fromInt(3400)->hasKopecks())->false();
+        expect(Money::fromAmount(3400)->hasKopecks())->false();
     }
 }
