@@ -57,6 +57,16 @@ class Money implements \JsonSerializable
         return $this->amount === 0;
     }
     
+    public function asAbsolute(): Money
+    {
+        return $this->isNegative() ? $this->negate() : $this;
+    }
+    
+    public function asNegative(): Money
+    {
+        return $this->isPositive() ? $this->negate() : $this;
+    }
+    
     /**
      * [$roubles, $kopecks] = (new Money(2340))->asPair();
      * @expect [23, 40]
@@ -124,6 +134,11 @@ class Money implements \JsonSerializable
     public static function fromInt(int $amount): Money
     {
         return new static($amount);
+    }
+    
+    public static function zero(): Money
+    {
+        return new static(0);
     }
     
     public static function fromPair(int $roubles, int $kopecks): Money

@@ -103,7 +103,6 @@ trait ArithmeticTrait
         for ($i = 0; $i < $remainder; $i++) {
             $result[$i] = new static($result[$i]->asInteger() + 1);
         }
-        
         return $result;
     }
     
@@ -111,4 +110,5 @@ trait ArithmeticTrait
     {
         return new static(-1 * $this->asInteger());
     }
+    
 }

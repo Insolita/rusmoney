@@ -16,6 +16,21 @@ use function expect_that;
 
 class MoneyTest extends TestCase
 {
+    public function testZero(){
+        expect(Money::zero())->equals(Money::fromInt(0));
+        expect(Money::zero()->asFloat())->equals(0);
+        expect(Money::zero()->asInteger())->equals(0);
+    }
+    public function testAsAbsolute(){
+        expect(Money::fromString('20')->asAbsolute()->asFloat())->equals(20);
+        expect(Money::fromString('-20')->asAbsolute()->asFloat())->equals(20);
+        expect(Money::fromString('0')->asAbsolute()->asFloat())->equals(0);
+    }
+    public function testAsNegative(){
+        expect(Money::fromString('20')->asNegative()->asFloat())->equals(-20);
+        expect(Money::fromString('-20')->asAbsolute()->asFloat())->equals(-20);
+        expect(Money::fromString('0')->asAbsolute()->asFloat())->equals(0);
+    }
     public function testFromInt()
     {
         expect(Money::fromInt(230)->asFloat())->equals(2.30);
