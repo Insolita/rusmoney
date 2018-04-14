@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace insolita\rusmoney;
 
+use DivisionByZeroError;
+use insolita\rusmoney\exceptions\DivisionByZeroException;
+
 /**
  * @mixin \insolita\rusmoney\Money
  */
@@ -37,6 +40,20 @@ trait ArithmeticTrait
     }
     
     /**
+     * @param int|float $number
+     *
+     * @return \insolita\rusmoney\Money
+     * @throws \insolita\rusmoney\exceptions\DivisionByZeroException
+     */
+    public function divideDirty($number): Money
+    {
+        if($number === 0){
+            throw new DivisionByZeroException();
+        }
+        return new static((int)static::round0($this->asAmount() / $number));
+    }
+    
+    /**
      * Allocate the monetary value represented by this Money object
      * among N targets.
      *
@@ -52,9 +69,13 @@ trait ArithmeticTrait
      * @param int $number
      *
      * @return static[]
+     * @throws \insolita\rusmoney\exceptions\DivisionByZeroException
      */
     public function allocateToTargets(int $number): array
     {
+        if($number === 0){
+            throw new DivisionByZeroException();
+        }
         $low = new static(intval($this->asAmount() / $number));
         $high = new static($low->asAmount() + 1);
         $remainder = $this->asAmount() % $number;

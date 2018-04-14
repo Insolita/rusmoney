@@ -7,10 +7,11 @@ namespace tests;
 
 use insolita\rusmoney\exceptions\OverflowException;
 use insolita\rusmoney\Money;
-use const PHP_INT_MAX;
 use PHPUnit\Framework\TestCase;
 use TypeError;
+use function expect;
 use function var_dump;
+use const PHP_INT_MAX;
 
 class ArithmeticTest extends TestCase
 {
@@ -95,11 +96,13 @@ class ArithmeticTest extends TestCase
         $this->expectException(TypeError::class);
         (new Money(PHP_INT_MAX))->add(new Money(1));
     }
+    
     public function testSumOverflow2()
     {
         $this->expectException(TypeError::class);
         (new Money(PHP_INT_MAX))->add(Money::fromPair(0, 1));
     }
+    
     public function testSubtractKopecks()
     {
         $t1 = Money::fromString('0.5')->subtract(Money::fromString('0.18'));
@@ -174,21 +177,21 @@ class ArithmeticTest extends TestCase
         expect($byThree[1]->equals($byThree[2]))->true();
         expect($byThree[0]->asAmount())->equals(3334);
         expect($byThree[1]->asAmount())->equals(3333);
-    
+        
         $money = new Money(4);
         $byThree = $money->allocateToTargets(3);
         expect($byThree)->count(3);
         expect($byThree[0]->asAmount())->equals(2);
         expect($byThree[1]->asAmount())->equals(1);
         expect($byThree[2]->asAmount())->equals(1);
-    
+        
         $money = new Money(2);
         $byThree = $money->allocateToTargets(3);
         expect($byThree)->count(3);
         expect($byThree[0]->asAmount())->equals(1);
         expect($byThree[1]->asAmount())->equals(1);
         expect($byThree[2]->asAmount())->equals(0);
-    
+        
         //!!!Warning
         $money = new Money(0);
         $byThree = $money->allocateToTargets(3);
@@ -196,6 +199,42 @@ class ArithmeticTest extends TestCase
         expect($byThree[0]->asAmount())->equals(0);
         expect($byThree[1]->asAmount())->equals(0);
         expect($byThree[2]->asAmount())->equals(0);
+    }
+    
+    public function testDivideDirty()
+    {
+        $money = new Money(3000);
+        expect($money->divideDirty(3)->asAmount())->equals(1000);
+    
+        $money = new Money(3333);
+        expect($money->divideDirty(3)->asAmount())->equals(1111);
+    
+        $money = new Money(30);
+        expect($money->divideDirty(3)->asAmount())->equals(10);
+        
+        $money = new Money(30);
+        expect($money->divideDirty(25)->asAmount())->equals(1);
+        
+        $money = new Money(3);
+        expect($money->divideDirty(3)->asAmount())->equals(1);
+    
+        $money = new Money(3);
+        expect($money->divideDirty(10)->asAmount())->equals(0);
+    
+        $money = new Money(3);
+        expect($money->divideDirty(0.1)->asAmount())->equals(30);
+    
+        $money = new Money(3);
+        expect($money->divideDirty(1)->asAmount())->equals(3);
+    
+        $money = new Money(-30);
+        expect($money->divideDirty(2)->asAmount())->equals(-15);
+    
+        $money = new Money(30);
+        expect($money->divideDirty(-2)->asAmount())->equals(-15);
+    
+        $money = new Money(-30);
+        expect($money->divideDirty(-2)->asAmount())->equals(15);
     }
     
     public function testAllocateByRatio()
@@ -218,35 +257,46 @@ class ArithmeticTest extends TestCase
         expect($division[0]->asAmount())->equals(4000);
         expect($division[1]->asAmount())->equals(4000);
         expect($division[2]->asAmount())->equals(4000);
-    
-        $division = $money->allocateByRatios([1,2,3,4,5]);
+        
+        $division = $money->allocateByRatios([1, 2, 3, 4, 5]);
         expect($division[0]->asAmount())->equals(800);
         expect($division[1]->asAmount())->equals(1600);
         expect($division[2]->asAmount())->equals(2400);
         expect($division[3]->asAmount())->equals(3200);
         expect($division[4]->asAmount())->equals(4000);
-    
+        
         $money = new Money(12);
         $division = $money->allocateByRatios([1, 1, 1]);
         expect($division[0]->asAmount())->equals(4);
         expect($division[1]->asAmount())->equals(4);
         expect($division[2]->asAmount())->equals(4);
-    
+        
         $money = new Money(2);
         $division = $money->allocateByRatios([1, 1, 1]);
         expect($division[0]->asAmount())->equals(1);
         expect($division[1]->asAmount())->equals(1);
         expect($division[2]->asAmount())->equals(0);
-    
+        
         $money = new Money(1);
         $division = $money->allocateByRatios([1, 1, 1]);
         expect($division[0]->asAmount())->equals(1);
         expect($division[1]->asAmount())->equals(0);
         expect($division[2]->asAmount())->equals(0);
-    
+        
         $money = new Money(1);
         $division = $money->allocateByRatios([50, 50]);
         expect($division[0]->asAmount())->equals(1);
         expect($division[1]->asAmount())->equals(0);
+    
+        $money = new Money(10000);
+        $division = $money->allocateByRatios([50,30, 10, 9, 0.5, 0.4, 0.09, 0.01]);
+        expect($division[0]->asAmount())->equals(5000);
+        expect($division[1]->asAmount())->equals(3000);
+        expect($division[2]->asAmount())->equals(1000);
+        expect($division[3]->asAmount())->equals(900);
+        expect($division[4]->asAmount())->equals(50);
+        expect($division[5]->asAmount())->equals(40);
+        expect($division[6]->asAmount())->equals(9);
+        expect($division[7]->asAmount())->equals(1);
     }
 }

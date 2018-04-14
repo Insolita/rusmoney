@@ -33,6 +33,12 @@ class PercentageTest extends TestCase
             ->equals(0.09);
         expect(Money::fromString('100')->calcPercent(18)->asFloat())
             ->equals(18);
+        expect(Money::fromString('200')->calcPercent(0.5)->asFloat())
+            ->equals(1);
+        expect(Money::fromString('200')->calcPercent(0.3)->asFloat())
+            ->equals(0.6);
+        expect(Money::fromString('200')->calcPercent(0.03)->asFloat())
+            ->equals(0.06);
     }
     
     public function testIncreaseOnPercent()
