@@ -33,10 +33,9 @@ class Money implements \JsonSerializable
     
     /**
      * @param int $amount
-     * @deprecated, use static creators
      * @throws \TypeError
      */
-    public function __construct(int $amount)
+    private function __construct(int $amount)
     {
         $this->amount = static::checkOverflow($amount);
         $this->formatter = new NumberFormatter(self::LOCALE, NumberFormatter::CURRENCY);

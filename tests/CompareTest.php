@@ -15,11 +15,11 @@ class CompareTest extends TestCase
         expect_that(Money::fromString('234')->equals(Money::fromString('234.00')));
         expect_that(Money::fromString('234')->equals(Money::fromAmount(23400)));
         expect_that(Money::fromString('234')->equals(Money::fromPair(234, 0)));
-        expect_that(Money::fromString('234')->equals(new Money(23400)));
-        expect_that(Money::fromString('234')->greaterThanOrEqual(new Money(23400)));
-        expect_that(Money::fromString('234')->lessThanOrEqual(new Money(23400)));
-        expect_that(Money::fromString('234')->greaterThan(new Money(23399)));
-        expect_that(Money::fromString('234')->lessThan(new Money(23401)));
+        expect_that(Money::fromString('234')->equals(Money::fromAmount(23400)));
+        expect_that(Money::fromString('234')->greaterThanOrEqual(Money::fromAmount(23400)));
+        expect_that(Money::fromString('234')->lessThanOrEqual(Money::fromAmount(23400)));
+        expect_that(Money::fromString('234')->greaterThan(Money::fromAmount(23399)));
+        expect_that(Money::fromString('234')->lessThan(Money::fromAmount(23401)));
     }
     
     public function testCompareKopecks()
@@ -27,20 +27,20 @@ class CompareTest extends TestCase
         expect_that(Money::fromString('0.15')->equals(Money::fromString('0.15')));
         expect_that(Money::fromString('0.15')->equals(Money::fromAmount(15)));
         expect_that(Money::fromString('0.15')->equals(Money::fromPair(0, 15)));
-        expect_that(Money::fromString('0.15')->equals(new Money(15)));
-        expect_that(Money::fromString('0.15')->greaterThanOrEqual(new Money(15)));
-        expect_that(Money::fromString('0.15')->lessThanOrEqual(new Money(15)));
-        expect_that(Money::fromString('0.15')->greaterThan(new Money(5)));
-        expect_that(Money::fromString('0.15')->lessThan(new Money(18)));
+        expect_that(Money::fromString('0.15')->equals(Money::fromAmount(15)));
+        expect_that(Money::fromString('0.15')->greaterThanOrEqual(Money::fromAmount(15)));
+        expect_that(Money::fromString('0.15')->lessThanOrEqual(Money::fromAmount(15)));
+        expect_that(Money::fromString('0.15')->greaterThan(Money::fromAmount(5)));
+        expect_that(Money::fromString('0.15')->lessThan(Money::fromAmount(18)));
     }
     
     public function testCompare()
     {
         expect_that(Money::fromString('234.10')->equals(Money::fromString('234.10')));
-        expect_that(Money::fromString('234.10')->equals(new Money(23410)));
+        expect_that(Money::fromString('234.10')->equals(Money::fromAmount(23410)));
         expect_that(Money::fromString('234.10')->equals(Money::fromPair(234, 10)));
-        expect_that(Money::fromString('234.10')->greaterThanOrEqual(new Money(23400)));
-        expect_that(Money::fromString('234.10')->lessThanOrEqual(new Money(23411)));
+        expect_that(Money::fromString('234.10')->greaterThanOrEqual(Money::fromAmount(23400)));
+        expect_that(Money::fromString('234.10')->lessThanOrEqual(Money::fromAmount(23411)));
         expect_that(Money::fromString('234.10')->greaterThan(Money::fromPair(234, 1)));
         expect_that(Money::fromString('234.10')->lessThan(Money::fromPair(234, 20)));
     }

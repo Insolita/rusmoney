@@ -19,30 +19,30 @@ class ArithmeticTest extends TestCase
     {
         expect(Money::fromString('234.19')->negate()->asAmount())->equals(-23419);
         expect(Money::fromString('-200')->negate()->asAmount())->equals(20000);
-        expect((new Money(-4567))->negate()->asFloat())->equals(45.67);
-        expect((new Money(5432))->negate()->asFloat())->equals(-54.32);
+        expect((Money::fromAmount(-4567))->negate()->asFloat())->equals(45.67);
+        expect((Money::fromAmount(5432))->negate()->asFloat())->equals(-54.32);
     }
     
     public function testMultiply()
     {
-        $multi = (new Money(100))->multiply(1);
+        $multi = (Money::fromAmount(100))->multiply(1);
         expect($multi->asAmount())->equals(100);
         expect($multi->asFloat())->equals(1);
         
-        $multi = (new Money(100))->multiply(54);
+        $multi = (Money::fromAmount(100))->multiply(54);
         expect($multi->asAmount())->equals(5400);
         expect($multi->asFloat())->equals(54);
         
-        $multi = (new Money(100))->multiply(0.2);
+        $multi = (Money::fromAmount(100))->multiply(0.2);
         expect($multi->asAmount())->equals(20);
         expect($multi->asFloat())->equals(0.2);
         
-        $multi = (new Money(100))->multiply(0.02);
+        $multi = (Money::fromAmount(100))->multiply(0.02);
         expect($multi->asAmount())->equals(2);
         expect($multi->asFloat())->equals(0.02);
         
         //!!!Warning
-        $multi = (new Money(100))->multiply(0.002);
+        $multi = (Money::fromAmount(100))->multiply(0.002);
         expect($multi->asAmount())->equals(0);
         expect($multi->asFloat())->equals(0.00);
     }
@@ -60,11 +60,11 @@ class ArithmeticTest extends TestCase
         expect($t1)->isInstanceOf(Money::class);
         expect($t1->asFloat())->equals(0.68);
         
-        $t2 = (new Money(11))->add(new Money(9));
+        $t2 = (Money::fromAmount(11))->add(Money::fromAmount(9));
         expect($t2->asFloat())->equals(0.2);
         expect($t2->asAmount())->equals(20);
         
-        $t2 = (new Money(99))->add(new Money(1));
+        $t2 = (Money::fromAmount(99))->add(Money::fromAmount(1));
         expect($t2->asFloat())->equals(1);
         expect($t2->asAmount())->equals(100);
     }
@@ -75,7 +75,7 @@ class ArithmeticTest extends TestCase
         expect($t1)->isInstanceOf(Money::class);
         expect($t1->asFloat())->equals(56677);
         
-        $t2 = (new Money(100))->add(new Money(200));
+        $t2 = (Money::fromAmount(100))->add(Money::fromAmount(200));
         expect($t2->asFloat())->equals(3);
         expect($t2->asAmount())->equals(300);
     }
@@ -86,7 +86,7 @@ class ArithmeticTest extends TestCase
         expect($t1)->isInstanceOf(Money::class);
         expect($t1->asFloat())->equals(566.77);
         
-        $t2 = (new Money(199))->add(new Money(201));
+        $t2 = (Money::fromAmount(199))->add(Money::fromAmount(201));
         expect($t2->asFloat())->equals(4);
         expect($t2->asAmount())->equals(400);
     }
@@ -94,13 +94,13 @@ class ArithmeticTest extends TestCase
     public function testSumOverflow()
     {
         $this->expectException(TypeError::class);
-        (new Money(PHP_INT_MAX))->add(new Money(1));
+        (Money::fromAmount(PHP_INT_MAX))->add(Money::fromAmount(1));
     }
     
     public function testSumOverflow2()
     {
         $this->expectException(TypeError::class);
-        (new Money(PHP_INT_MAX))->add(Money::fromPair(0, 1));
+        (Money::fromAmount(PHP_INT_MAX))->add(Money::fromPair(0, 1));
     }
     
     public function testSubtractKopecks()
@@ -109,15 +109,15 @@ class ArithmeticTest extends TestCase
         expect($t1)->isInstanceOf(Money::class);
         expect($t1->asFloat())->equals(0.32);
         
-        $t2 = (new Money(11))->subtract(new Money(9));
+        $t2 = (Money::fromAmount(11))->subtract(Money::fromAmount(9));
         expect($t2->asFloat())->equals(0.02);
         expect($t2->asAmount())->equals(2);
         
-        $t2 = (new Money(101))->subtract(new Money(1));
+        $t2 = (Money::fromAmount(101))->subtract(Money::fromAmount(1));
         expect($t2->asFloat())->equals(1);
         expect($t2->asAmount())->equals(100);
         
-        $t2 = (new Money(5))->subtract(new Money(5));
+        $t2 = (Money::fromAmount(5))->subtract(Money::fromAmount(5));
         expect($t2->asFloat())->equals(0);
         expect($t2->asAmount())->equals(0);
     }
@@ -128,15 +128,15 @@ class ArithmeticTest extends TestCase
         expect($t1)->isInstanceOf(Money::class);
         expect($t1->asFloat())->equals(900);
         
-        $t2 = (new Money(400))->subtract(new Money(200));
+        $t2 = (Money::fromAmount(400))->subtract(Money::fromAmount(200));
         expect($t2->asFloat())->equals(2);
         expect($t2->asAmount())->equals(200);
         
-        $t2 = (new Money(2508907))->subtract(new Money(2508907));
+        $t2 = (Money::fromAmount(2508907))->subtract(Money::fromAmount(2508907));
         expect($t2->asFloat())->equals(0);
         expect($t2->asAmount())->equals(0);
         
-        $t2 = (new Money(2508907))->subtract(new Money(2508906));
+        $t2 = (Money::fromAmount(2508907))->subtract(Money::fromAmount(2508906));
         expect($t2->asFloat())->equals(0.01);
         expect($t2->asAmount())->equals(1);
     }
@@ -151,14 +151,14 @@ class ArithmeticTest extends TestCase
         expect($t1)->isInstanceOf(Money::class);
         expect($t1->asFloat())->equals(22.01);
         
-        $t2 = (new Money(201))->subtract(new Money(199));
+        $t2 = (Money::fromAmount(201))->subtract(Money::fromAmount(199));
         expect($t2->asFloat())->equals(0.02);
         expect($t2->asAmount())->equals(2);
     }
     
     public function testAllocateToTargets()
     {
-        $money = new Money(12000);
+        $money = Money::fromAmount(12000);
         $byHalf = $money->allocateToTargets(2);
         expect($byHalf)->count(2);
         expect($byHalf[0]->equals($byHalf[1]))->true();
@@ -170,7 +170,7 @@ class ArithmeticTest extends TestCase
         expect($byThree[0]->equals($byThree[2]))->true();
         expect($byThree[0]->asAmount())->equals(4000);
         
-        $money = new Money(10000);
+        $money = Money::fromAmount(10000);
         $byThree = $money->allocateToTargets(3);
         expect($byThree)->count(3);
         expect($byThree[0]->greaterThan($byThree[1]))->true();
@@ -178,14 +178,14 @@ class ArithmeticTest extends TestCase
         expect($byThree[0]->asAmount())->equals(3334);
         expect($byThree[1]->asAmount())->equals(3333);
         
-        $money = new Money(4);
+        $money = Money::fromAmount(4);
         $byThree = $money->allocateToTargets(3);
         expect($byThree)->count(3);
         expect($byThree[0]->asAmount())->equals(2);
         expect($byThree[1]->asAmount())->equals(1);
         expect($byThree[2]->asAmount())->equals(1);
         
-        $money = new Money(2);
+        $money = Money::fromAmount(2);
         $byThree = $money->allocateToTargets(3);
         expect($byThree)->count(3);
         expect($byThree[0]->asAmount())->equals(1);
@@ -193,7 +193,7 @@ class ArithmeticTest extends TestCase
         expect($byThree[2]->asAmount())->equals(0);
         
         //!!!Warning
-        $money = new Money(0);
+        $money = Money::fromAmount(0);
         $byThree = $money->allocateToTargets(3);
         expect($byThree)->count(3);
         expect($byThree[0]->asAmount())->equals(0);
@@ -203,43 +203,43 @@ class ArithmeticTest extends TestCase
     
     public function testDivideDirty()
     {
-        $money = new Money(3000);
+        $money = Money::fromAmount(3000);
         expect($money->divideDirty(3)->asAmount())->equals(1000);
     
-        $money = new Money(3333);
+        $money = Money::fromAmount(3333);
         expect($money->divideDirty(3)->asAmount())->equals(1111);
     
-        $money = new Money(30);
+        $money = Money::fromAmount(30);
         expect($money->divideDirty(3)->asAmount())->equals(10);
         
-        $money = new Money(30);
+        $money = Money::fromAmount(30);
         expect($money->divideDirty(25)->asAmount())->equals(1);
         
-        $money = new Money(3);
+        $money = Money::fromAmount(3);
         expect($money->divideDirty(3)->asAmount())->equals(1);
     
-        $money = new Money(3);
+        $money = Money::fromAmount(3);
         expect($money->divideDirty(10)->asAmount())->equals(0);
     
-        $money = new Money(3);
+        $money = Money::fromAmount(3);
         expect($money->divideDirty(0.1)->asAmount())->equals(30);
     
-        $money = new Money(3);
+        $money = Money::fromAmount(3);
         expect($money->divideDirty(1)->asAmount())->equals(3);
     
-        $money = new Money(-30);
+        $money = Money::fromAmount(-30);
         expect($money->divideDirty(2)->asAmount())->equals(-15);
     
-        $money = new Money(30);
+        $money = Money::fromAmount(30);
         expect($money->divideDirty(-2)->asAmount())->equals(-15);
     
-        $money = new Money(-30);
+        $money = Money::fromAmount(-30);
         expect($money->divideDirty(-2)->asAmount())->equals(15);
     }
     
     public function testAllocateByRatio()
     {
-        $money = new Money(12000);
+        $money = Money::fromAmount(12000);
         $division = $money->allocateByRatios([20, 80]);
         expect($division[0]->asAmount())->equals(2400);
         expect($division[1]->asAmount())->equals(9600);
@@ -265,30 +265,30 @@ class ArithmeticTest extends TestCase
         expect($division[3]->asAmount())->equals(3200);
         expect($division[4]->asAmount())->equals(4000);
         
-        $money = new Money(12);
+        $money = Money::fromAmount(12);
         $division = $money->allocateByRatios([1, 1, 1]);
         expect($division[0]->asAmount())->equals(4);
         expect($division[1]->asAmount())->equals(4);
         expect($division[2]->asAmount())->equals(4);
         
-        $money = new Money(2);
+        $money = Money::fromAmount(2);
         $division = $money->allocateByRatios([1, 1, 1]);
         expect($division[0]->asAmount())->equals(1);
         expect($division[1]->asAmount())->equals(1);
         expect($division[2]->asAmount())->equals(0);
         
-        $money = new Money(1);
+        $money = Money::fromAmount(1);
         $division = $money->allocateByRatios([1, 1, 1]);
         expect($division[0]->asAmount())->equals(1);
         expect($division[1]->asAmount())->equals(0);
         expect($division[2]->asAmount())->equals(0);
         
-        $money = new Money(1);
+        $money = Money::fromAmount(1);
         $division = $money->allocateByRatios([50, 50]);
         expect($division[0]->asAmount())->equals(1);
         expect($division[1]->asAmount())->equals(0);
     
-        $money = new Money(10000);
+        $money = Money::fromAmount(10000);
         $division = $money->allocateByRatios([50,30, 10, 9, 0.5, 0.4, 0.09, 0.01]);
         expect($division[0]->asAmount())->equals(5000);
         expect($division[1]->asAmount())->equals(3000);

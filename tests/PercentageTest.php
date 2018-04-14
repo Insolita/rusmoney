@@ -17,11 +17,11 @@ class PercentageTest extends TestCase
 {
     public function testSmallValuesPercentage()
     {
-        expect((new Money(100))->calcPercent()->asFloat())
+        expect((Money::fromAmount(100))->calcPercent()->asFloat())
             ->equals(0.01);
-        expect((new Money(220))->calcPercent()->asFloat())
+        expect((Money::fromAmount(220))->calcPercent()->asFloat())
             ->equals(0.02);
-        expect((new Money(30))->calcPercent(10)->asFloat())
+        expect((Money::fromAmount(30))->calcPercent(10)->asFloat())
             ->equals(0.03);
     }
     

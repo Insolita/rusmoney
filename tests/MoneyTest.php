@@ -9,6 +9,7 @@ namespace tests;
 use insolita\rusmoney\exceptions\ParseMoneyException;
 use insolita\rusmoney\Money;
 use PHPUnit\Framework\TestCase;
+use function print_r;
 use TypeError;
 use const PHP_INT_MAX;
 use function expect;
@@ -73,7 +74,7 @@ class MoneyTest extends TestCase
     public function testFromIntOverflow2()
     {
         $this->expectException(TypeError::class);
-        new Money(PHP_INT_MAX + 1);
+        Money::fromAmount(PHP_INT_MAX + 1);
     }
     
     public function testFromString()
@@ -146,7 +147,7 @@ class MoneyTest extends TestCase
     
     public function testWithoutKopecksCasts()
     {
-        $m = new Money(234900);
+        $m = Money::fromAmount(234900);
         expect($m->asFloat())->equals(2349);
         expect($m->asString())->equals('2349');
         expect($m->asFormattedString())->equals('2 349,00 р.');
@@ -162,7 +163,7 @@ class MoneyTest extends TestCase
     
     public function testWithoutRublesCasts()
     {
-        $m = new Money(7);
+        $m = Money::fromAmount(7);
         expect($m->asFloat())->equals(0.07);
         expect($m->asString())->equals('0.07');
         expect($m->asFormattedString())->equals('0,07 р.');
@@ -178,7 +179,7 @@ class MoneyTest extends TestCase
     
     public function testZeroCasts()
     {
-        $m = new Money(0);
+        $m = Money::fromAmount(0);
         expect($m->asFloat())->equals(0);
         expect($m->asString())->equals('0');
         expect($m->asFormattedString())->equals('0,00 р.');
@@ -194,7 +195,7 @@ class MoneyTest extends TestCase
     
     public function testOneRuble()
     {
-        $m = new Money(100);
+        $m = Money::fromAmount(100);
         expect($m->asFloat())->equals(1);
         expect($m->asString())->equals('1');
         expect($m->asFormattedString())->equals('1,00 р.');
@@ -210,7 +211,7 @@ class MoneyTest extends TestCase
     
     public function testMixedCasts()
     {
-        $m = new Money(237);
+        $m = Money::fromAmount(237);
         expect($m->asFloat())->equals(2.37);
         expect($m->asString())->equals('2.37');
         expect($m->asFormattedString())->equals('2,37 р.');
@@ -226,7 +227,7 @@ class MoneyTest extends TestCase
     
     public function testTenKopecks()
     {
-        $m = new Money(10);
+        $m = Money::fromAmount(10);
         expect($m->asFloat())->equals(0.10);
         expect($m->asString())->equals('0.10');
         expect($m->asFormattedString())->equals('0,10 р.');
