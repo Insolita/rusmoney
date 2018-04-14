@@ -33,7 +33,7 @@ class Money implements \JsonSerializable
     
     /**
      * @param int $amount
-     *
+     * @deprecated, use static creators
      * @throws \TypeError
      */
     public function __construct(int $amount)
@@ -140,7 +140,10 @@ class Money implements \JsonSerializable
         static::checkStringByPattern($value);
         return new static((int)static::round0(100 * static::round2($value)));
     }
-    
+    public static function fromNumber(float $value): Money
+    {
+        return new static((int)static::round0(100 * static::round2($value)));
+    }
     public static function fromAmount(int $amount): Money
     {
         return new static($amount);

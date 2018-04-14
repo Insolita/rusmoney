@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace insolita\rusmoney;
 
-use DivisionByZeroError;
 use insolita\rusmoney\exceptions\DivisionByZeroException;
 
 /**

@@ -50,7 +50,7 @@ class MoneyTest extends TestCase
         expect(Money::fromAmount(3400)->asRoubles())->equals(34);
     }
     
-    public function testFromInt()
+    public function testFromAmount()
     {
         expect(Money::fromAmount(230)->asFloat())->equals(2.30);
         expect(Money::fromAmount(-230)->asFloat())->equals(-2.30);
@@ -93,7 +93,23 @@ class MoneyTest extends TestCase
         expect(Money::fromString('0')->asFloat())->equals(0);
         expect(Money::fromString('-2.30')->asAmount())->equals(-230);
     }
-    
+    public function testFromNumber()
+    {
+        expect(Money::fromNumber(2.30)->asFloat())->equals(2.30);
+        expect(Money::fromNumber(-2.30)->asFloat())->equals(-2.30);
+        expect(Money::fromNumber(-200)->asFloat())->equals(-200);
+        expect(Money::fromNumber(23572.22)->asFloat())->equals(23572.22);
+        expect(Money::fromNumber(123456789)->asFloat())->equals(123456789);
+        expect(Money::fromNumber(-23572.22)->asFloat())->equals(-23572.22);
+        expect(Money::fromNumber(0.04)->asFloat())->equals(0.04);
+        expect(Money::fromNumber(0.0000004)->asFloat())->equals(0);
+        expect(Money::fromNumber(0.12332112)->asFloat())->equals(0.12);
+        expect(Money::fromNumber(0.29)->asFloat())->equals(0.29);
+        expect(Money::fromNumber(0.2)->asFloat())->equals(0.20);
+        expect(Money::fromNumber(-0.2)->asFloat())->equals(-0.20);
+        expect(Money::fromNumber(0)->asFloat())->equals(0);
+        expect(Money::fromNumber(-2.30)->asAmount())->equals(-230);
+    }
     public function testFromStringOverflow()
     {
         $this->expectException(ParseMoneyException::class);
